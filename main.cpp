@@ -2,11 +2,12 @@
 #include "User.h"
 
 using namespace std;
+User arr[100];
+
 int main(){
-    User osama = User("Osama","123");
-    User omar = User("zepy", "4912");
-    User bozo = User("tez", "tezbozo");
+    arr[1] = User("Osama","123", 1);
+    arr[10] = User("7alaaawaaaa", "mashy", 10);
 
-    osama.AddContact(bozo);
-
+    cout << arr[1].GetUsername() << endl;
+    cout << arr[10].GetUsername() << endl;
 }

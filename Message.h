@@ -11,6 +11,7 @@ private:
     int Time;
 
 public:
+    Message();
     Message(string tx, int t);
 
     string GetContent();

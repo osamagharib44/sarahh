@@ -6,6 +6,9 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+Message::Message() {
+
+}
 Message::Message(string tx, int t) {
     this->Content = tx;
     this->Time = t;
@@ -18,3 +21,4 @@ string Message::GetContent() {
 int Message::GetTime() {
     return this->Time;
 }
+

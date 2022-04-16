@@ -18,12 +18,10 @@ private:
     stack<pair<int,Message>> SentMessages;
 
 public:
-    User(string User, string Pass);
-
-    void addUserToContact(int);
-    void searchContact(int);
-    void displayUserContacts(int);
-
+    User();
+    User(string User, string Pass, int id);
+    string GetUsername();
+    string GetPassword();
     ~User();
 };
 
