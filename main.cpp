@@ -37,9 +37,9 @@ int main(){
     //for debug
     users[1] = User("osama","ok",1);
     amount++;
-    users[2] = User("bozo","ok",2);
+    users[2] = User("mr underwear","ok",2);
     amount++;
-    users[3] = User("fs","ok",3);
+    users[3] = User("3shmawy elguard elshrs","ok",3);
     users[3].sendMessage(1,"please work", users);
     amount++;
     //
