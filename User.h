@@ -14,14 +14,35 @@ private:
     string Password;
     vector<int> Contacts;
     queue<Message> FavMsgs;
-    vector<Message> RecMessages;
+    vector<Message> RecMessages[101];
     stack<pair<int,Message>> SentMessages;
 
+
 public:
+    //Base
     User();
     User(string User, string Pass, int id);
     string GetUsername();
     string GetPassword();
+
+
+    //7alw&ASHRAF
+    /*----------------------------*/
+    void addContact(int userID);
+    static void displayContacts(int userID, User data[]);
+    void searchForContact(string name , User data[]);
+    /*----------------------------*/
+
+    //soha
+    void sendMessage(int Id, const string &txt, User data[]);
+    void undoLastMessage(User data[]);
+    void getMessagesFrom(int Id);
+
+    //yasmin
+    void addRecentMsgToFav(int id);
+    void viewAllFavMsgs();
+    void removeOldestFavMsg();
+
     ~User();
 };
 

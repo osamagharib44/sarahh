@@ -8,12 +8,12 @@ using namespace std;
 class Message {
 private:
     string Content;
-    int Time;
+    string Time;
 
 public:
     Message();
-    Message(string tx, int t);
+    Message(string tx);
 
     string GetContent();
-    int GetTime();
+    string GetTime();
 };

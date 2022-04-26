@@ -7,7 +7,6 @@
 
 using namespace std;
 User::User() {
-
 }
 User::User(string User, string Pass, int id) {
     this->Username = User;
@@ -23,11 +22,132 @@ string User::GetUsername() {
     return this->Username;
 }
 
+/*----------------------------*/
 
-User::~User() {
-
-
+void User::addContact(int userID)
+{
+    for (auto i : Contacts){
+        if (i==userID) {
+            cout << "Contact you're trying to add already exists!!" << endl;
+            return;
+        }
+    }
+    cout <<"Contact Added successfully" << endl;
+    Contacts.push_back(userID);
 }
+void User::displayContacts(int userID, User data[])
+{
+    User user = data[userID];
+
+    if (user.Contacts.empty())
+        cout << "Contact List is Empty !! " << endl;
+    else {
+        cout << "---------------------\n";
+        cout << "You have " << user.Contacts.size() << " Contacts." << endl;
+        for (int i = 0; i < user.Contacts.size(); i++)
+        {
+            cout <<data[user.Contacts.at(i)].GetUsername() << endl;
+        }
+    }
+}
+void User::searchForContact(string name, User data[]) {
+
+    transform(name.begin(), name.end(), name.begin(),::tolower);
+    User user;
+    bool bad = true;
+
+    string pattern = "(.)*";
+    for (auto c : name) {
+        pattern.push_back('[');
+        pattern.push_back(c);
+        pattern.push_back(']');
+    }
+    int userID;
+    pattern += "(.)*";
+    regex e(pattern);
+
+    for (int i = 0; i < this->Contacts.size(); i++)
+    {
+        userID = this->Contacts.at(i);
+        user = data[userID];
+        bool match = regex_match(user.GetUsername(), e);
+        if (match)
+        {
+            cout << "---------------------\n";
+            cout <<"Contact name : "<< user.GetUsername() << endl;
+            cout <<"Contact ID: "<< user.ID << endl;
+            bad = false;
+        }
+    }
+    if (bad) {
+        cout << "Contact not Found!!" << endl;
+    }
+   cout << endl;
+}
+
+/*----------------------------*/
+
+void User::sendMessage(int Id, const string&txt, User data[]){
+    Message msg = Message(txt);
+    data[Id].RecMessages[this->ID].push_back(msg);
+    this->SentMessages.push({Id, msg});
+    cout <<"Message sent." << endl;
+}
+void User::undoLastMessage(User data[]){
+    int Id = this->SentMessages.top().first;
+    this->SentMessages.pop();
+    data[Id].RecMessages[this->ID].pop_back();
+}
+void User::getMessagesFrom(int Id){
+    cout << RecMessages[Id].size() << " Message(s)" << endl;
+    for (auto ms : RecMessages[Id]){
+        cout << ms.GetContent() << endl;
+    }
+    cout << endl;
+}
+
+/*----------------------------*/
+
+void User::addRecentMsgToFav(int id)
+{
+    if (this->RecMessages[id].empty()){
+        cout << "You didn't receive any message from that contact!!" << endl;
+        return;
+    }
+    FavMsgs.push(this->RecMessages[id].front());
+    cout <<"Message favourited successfully!" << endl;
+}
+void User::viewAllFavMsgs()
+{
+    if (this->FavMsgs.empty())
+        cout <<"You haven't favourited any message yet." << endl;
+    else {
+        cout << " Your Favourite messages:" << endl;
+        int S = this->FavMsgs.size();
+        for (int i = 1; i<=S;i++){
+            auto ms = this->FavMsgs.front();
+            this->FavMsgs.pop();
+            cout <<endl<< " "<< ms.GetContent() << endl << " Time: " << ms.GetTime() << endl;
+            this->FavMsgs.push(ms);
+        }
+    }
+}
+void User::removeOldestFavMsg()
+{
+    if (!FavMsgs.empty()) {
+        FavMsgs.pop();
+        cout <<"Removed oldest favourite message.";
+    }
+    else {
+        cout <<"You haven't favourited any message yet.";
+    }
+    cout << endl;
+}
+
+/*----------------------------*/
+
+User::~User() = default;
+
 
 
 

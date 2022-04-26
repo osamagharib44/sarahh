@@ -6,19 +6,18 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-Message::Message() {
+Message::Message() = default;
 
-}
-Message::Message(string tx, int t) {
+Message::Message(string tx) {
     this->Content = tx;
-    this->Time = t;
+    this->Time = "12:00 AM";
 }
 
 string Message::GetContent() {
     return this->Content;
 }
 
-int Message::GetTime() {
+string Message::GetTime() {
     return this->Time;
 }
 
