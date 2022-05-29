@@ -22,8 +22,101 @@ string User::GetUsername() {
     return this->Username;
 }
 
-/*----------------------------*/
+void User::ReadDataFromFile(ifstream &data){
+    int s;
+    int idx;
+    string ms,t;
 
+    //read contacts
+    data >> s;
+    while (s--){
+        int cont;
+        data >> cont;
+        this->Contacts.push_back(cont);
+    }
+    data.ignore();
+
+    //read fav messages
+    data >> s;
+    data.ignore();
+    while (s--){
+        getline(data,ms);
+        getline(data,t);
+        this->FavMsgs.push(Message(ms,t));
+    }
+
+    //read all received messages
+    data >> s;
+    data.ignore();
+    while (s--){
+        data >> idx; data.ignore();
+        getline(data,ms);
+        getline(data,t);
+        this->RecMessages[idx].push_back(Message(ms,t));
+    }
+
+    //read all sent messages;
+    data >> s;
+    data.ignore();
+    stack<pair<int,Message>> sta;
+    while (s--){
+        data >> idx; data.ignore();
+        getline(data,ms);
+        getline(data,t);
+        sta.push({idx,Message(ms,t)});
+    }
+    while (sta.size()){
+        this->SentMessages.push(sta.top());
+        sta.pop();
+    }
+}
+
+void User::SaveDataToFile(ofstream &data) {
+    data << endl;
+    data << this->GetUsername()<< endl;
+    data << this->GetPassword() << endl;
+
+    //contacts
+    data << this->Contacts.size();
+    for (auto c : this->Contacts){
+        data << ' ' << c;
+    }
+    data << endl;
+
+    //fav messages
+    data << this->FavMsgs.size() << endl;
+    while (this->FavMsgs.size()){
+        data << this->FavMsgs.front().GetContent() << endl;
+        data << this->FavMsgs.front().GetTime() << endl;
+        this->FavMsgs.pop();
+    }
+
+    //rec messages
+    vector<pair<int,Message>> vec;
+    for (int i = 1; i<101;i++){
+        for (auto m : this->RecMessages[i]){
+            vec.push_back({i,m});
+        }
+    }
+    data<<vec.size()<<endl;
+    for (auto m : vec){
+        data << m.first << endl;
+        data << m.second.GetContent() << endl;
+        data << m.second.GetTime() << endl;
+    }
+
+    //sent messages
+    data<< this->SentMessages.size() << endl;
+    while (this->SentMessages.size()){
+        data << this->SentMessages.top().first << endl;
+        data << this->SentMessages.top().second.GetContent() << endl;
+        data << this->SentMessages.top().second.GetTime() << endl;
+        this->SentMessages.pop();
+    }
+
+}
+
+/*----------------------------*/
 void User::addContact(int userID)
 {
     for (auto i : Contacts){
@@ -51,7 +144,6 @@ void User::displayContacts(int userID, User data[])
     }
 }
 void User::searchForContact(string name, User data[]) {
-
     transform(name.begin(), name.end(), name.begin(),::tolower);
     User user;
     bool bad = true;
@@ -61,7 +153,7 @@ void User::searchForContact(string name, User data[]) {
         pattern.push_back('[');
         pattern.push_back(c);
         pattern.push_back(']');
-    }
+    }//(.)*[s](.)*
     int userID;
     pattern += "(.)*";
     regex e(pattern);
@@ -75,7 +167,6 @@ void User::searchForContact(string name, User data[]) {
         {
             cout << "---------------------\n";
             cout <<"Contact name : "<< user.GetUsername() << endl;
-            cout <<"Contact ID: "<< user.ID << endl;
             bad = false;
         }
     }
@@ -101,11 +192,25 @@ void User::undoLastMessage(User data[]){
 void User::getMessagesFrom(int Id){
     cout << RecMessages[Id].size() << " Message(s)" << endl;
     for (auto ms : RecMessages[Id]){
-        cout << ms.GetContent() << endl;
+        cout << ms.GetContent() << endl << " Time: " << ms.GetTime() << endl;
     }
     cout << endl;
 }
-
+void User::viewSentMessages(User data[]){
+    if (this->SentMessages.empty()){
+        cout << "You haven't sent any messages yet!" << endl;
+    }
+    else {
+        auto temp = this->SentMessages;
+        while (temp.size()){
+            auto pa = temp.top();
+            cout <<endl << "Sent to: "<<data[pa.first].GetUsername()<<endl;
+            auto ms = pa.second;
+            cout <<" "<< ms.GetContent() << endl << " Time: " << ms.GetTime() << endl;
+            temp.pop();
+        }
+    }
+}
 /*----------------------------*/
 
 void User::addRecentMsgToFav(int id)
@@ -143,6 +248,7 @@ void User::removeOldestFavMsg()
     }
     cout << endl;
 }
+
 
 /*----------------------------*/
 

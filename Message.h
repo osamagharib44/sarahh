@@ -13,6 +13,7 @@ private:
 public:
     Message();
     Message(string tx);
+    Message(string tx, string t);
 
     string GetContent();
     string GetTime();

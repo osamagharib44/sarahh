@@ -10,7 +10,17 @@ Message::Message() = default;
 
 Message::Message(string tx) {
     this->Content = tx;
-    this->Time = "12:00 AM";
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+    this->Time = buf;
+}
+
+Message::Message(string tx, string t){
+    this->Content = tx;
+    this->Time = t;
 }
 
 string Message::GetContent() {

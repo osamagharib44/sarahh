@@ -26,6 +26,9 @@ public:
     string GetPassword();
 
 
+    void SaveDataToFile(ofstream &data);
+    void ReadDataFromFile(ifstream &data);
+
     //7alw&ASHRAF
     /*----------------------------*/
     void addContact(int userID);
@@ -37,6 +40,7 @@ public:
     void sendMessage(int Id, const string &txt, User data[]);
     void undoLastMessage(User data[]);
     void getMessagesFrom(int Id);
+    void viewSentMessages(User data[]);
 
     //yasmin
     void addRecentMsgToFav(int id);
