@@ -72,7 +72,7 @@ void DoLoginRegister(){
                 }
                 break;
             }
-            cout << "Enter your password:";
+            print("Enter your Password:");
             cin >> pass;
             amount++;
             curid = amount;
@@ -96,8 +96,8 @@ void DoLoginRegister(){
                 }
                 else{
                     curid = CheckName(name);
-                    cout << "Enter your password:";
-                    cin >> pass;
+                    print("Enter your password:");
+                    getline(cin,pass);
                     if (users[curid].GetPassword()==pass){
                         break;
                     }
@@ -170,8 +170,8 @@ void DoOperations(){
             users[curid].addContact(GetTargetId());
             break;
         case 2:
-            cout << "Username to search for:";
-            cin >> x;
+            print("Username to search for");
+            getline(cin,x);
             users[curid].searchForContact(x, users);
             break;
         case 3:
