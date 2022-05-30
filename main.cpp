@@ -42,6 +42,26 @@ int CheckName(string str){
     return MapNameToId[str];
 }
 
+bool ValidPass(string &Pass){
+    regex Upper_Case{"[A-Z]+"};
+    regex Lower_Case{"[a-z]+"};
+    regex Number{"[0-9]+"};
+    regex Special_Char{"[!@#$%^&*()=+]+"};
+
+    int upperCase = regex_search(Pass, Upper_Case);
+    int lowerCase = regex_search(Pass, Lower_Case);
+    int number = regex_search(Pass, Number);
+    int specialChar = regex_search(Pass, Special_Char);
+
+    if (Pass.length()<8){
+        return false;
+    }
+    if (upperCase&lowerCase&specialChar&number){
+        return true;
+    }
+    return false;
+}
+
 bool Validator(string str){
     for (auto c : str){
         if (c<33 || c>126 || isspace(c)) {
@@ -72,8 +92,18 @@ void DoLoginRegister(){
                 }
                 break;
             }
-            print("Enter your Password:");
-            cin >> pass;
+            while (true){
+                print("Enter your Password:");
+                cin >> pass;
+                bool good = ValidPass(pass);
+                if (good){
+                    break;
+                }
+                else {
+                    print("Password must be atleast 8 characters, and must contain uppercase letters, lowercase letters and numbers.");
+                }
+            }
+
             amount++;
             curid = amount;
             users[curid] = User(name,pass,curid);
